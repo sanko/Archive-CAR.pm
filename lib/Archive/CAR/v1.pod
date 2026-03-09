@@ -1,0 +1,41 @@
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+InterPlanetary::CAR::v1 - CAR v1 archive format implementation
+
+=head1 SYNOPSIS
+
+    use InterPlanetary::CAR::v1;
+
+    my $v1 = InterPlanetary::CAR::v1->new();
+    $v1->read("archive.car");
+
+=head1 DESCRIPTION
+
+C<InterPlanetary::CAR::v1> implements the reading and writing of Content Addressable Archive (CAR) version 1 files. It
+handles the concatenation of CID-prefixed data blocks.
+
+=head1 METHODS
+
+=head2 read($path) / write($path)
+
+Low-level I/O methods for CAR v1 files.
+
+=head1 SEE ALSO
+
+L<https://ipld.io/specs/transport/car/carv1/>, L<InterPlanetary::CAR>, L<InterPlanetary::CAR::v2>
+
+=head1 AUTHOR
+
+Sanko Robinson E<lt>sanko@cpan.orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2026 by Sanko Robinson.
+
+This library is free software; you can redistribute it and/or modify it under the terms of the Artistic License 2.0.
+
+=cut
