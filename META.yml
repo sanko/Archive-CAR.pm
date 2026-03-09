@@ -23,7 +23,7 @@ no_index:
 provides:
   Archive::CAR:
     file: lib/Archive/CAR.pm
-    version: '0.01'
+    version: v0.0.1
   Archive::CAR::Base:
     file: lib/Archive/CAR/Base.pm
     version: v0.0.1
@@ -52,7 +52,7 @@ requires:
 resources:
   license: http://www.perlfoundation.org/artistic_license_2_0
   repository: https://github.com/sanko/Archive-CAR
-version: '0.01'
+version: v0.0.1
 x_ignore:
   - .tidyallrc
   - .gitignore
