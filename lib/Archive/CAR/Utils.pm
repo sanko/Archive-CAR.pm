@@ -1,10 +1,14 @@
 use v5.40;
-
-package Archive::CAR::Utils v0.0.1 {
-    use Archive::CAR::CID;
+#
+package Archive::CAR::Utils v0.0.2 {
+    use Fcntl 'SEEK_CUR';
     use Exporter 'import';
-    our @EXPORT_OK = qw[encode_varint decode_varint decode_cid];
+    our @EXPORT_OK = qw[encode_varint decode_varint decode_cid systell];
     #
+    sub systell ($fh) {
+        return tell($fh);
+    }
+
     sub encode_varint ($val) {
         my $out = '';
         while ( $val >= 0x80 ) {
@@ -15,17 +19,19 @@ package Archive::CAR::Utils v0.0.1 {
         return $out;
     }
 
-    sub decode_varint ( $str_or_fh, $offset = 0 ) {
+    sub decode_varint ( $str_or_fh, $offset //= 0 ) {
+        use Scalar::Util qw[openhandle];
 
         # Handles both scalar strings and filehandles
-        my $is_fh = ref($str_or_fh) eq 'GLOB' || ( ref($str_or_fh) && $str_or_fh->isa('IO::Handle') );
+        my $is_fh = openhandle($str_or_fh);
         my ( $val, $shift, $bytes_read ) = ( 0, 0, 0 );
         my $initial_offset = $offset;
         while (1) {
             my $byte_val;
             if ($is_fh) {
-                my $bytes_read_now = read( $str_or_fh, my $byte_char, 1 );
-                return ( undef, 0 ) unless $bytes_read_now && $bytes_read_now == 1;
+                my $byte_char;
+                my $bytes_read_now = read( $str_or_fh, $byte_char, 1 );
+                return ( undef, 0 ) unless defined $bytes_read_now && $bytes_read_now == 1;
                 $byte_val = ord($byte_char);
             }
             else {
@@ -41,6 +47,7 @@ package Archive::CAR::Utils v0.0.1 {
     }
 
     sub decode_cid ($fh) {
+        require Archive::CAR::CID;
         return Archive::CAR::CID->decode($fh);
     }
 };

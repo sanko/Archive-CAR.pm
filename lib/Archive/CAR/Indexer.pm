@@ -1,7 +1,8 @@
 use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
-class Archive::CAR::Indexer v0.0.1 {
+#
+class Archive::CAR::Indexer v0.0.2 {
     use Archive::CAR::Utils;
 
     # Simple index format (Format 0x0400: Multihash -> Offset)
@@ -36,4 +37,6 @@ class Archive::CAR::Indexer v0.0.1 {
         }
         return $data;
     }
-} 1;
+};
+#
+1;

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Added `Archive::CAR::CID->from_raw($bytes)` for easier decoding from binary sources.
+
+### Changed
+- Improved CID decoding to handle optional leading zero bytes common in firehose events.
+
 ## [v0.0.1] - 2026-03-09
 
 ### Changed

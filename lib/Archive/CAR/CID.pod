@@ -47,11 +47,16 @@ Returns the raw binary representation of the CID.
 
 =head2 C<to_string()>
 
-Returns a hexadecimal string representation of the raw CID bytes.
+Returns a hexadecimal string representation of the raw CID bytes (or base32 for CIDv1).
 
 =head2 C<decode($fh)>
 
-Class method. Decodes a binary CID from a filehandle.
+Class method. Decodes a binary CID from a filehandle using standard buffered I/O.
+
+=head2 C<from_raw($bytes)>
+
+Class method. Creates a CID object from a raw byte string. This is useful for CIDs obtained from external sources like
+firehose events.
 
 =head1 SEE ALSO
 

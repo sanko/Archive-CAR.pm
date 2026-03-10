@@ -2,8 +2,8 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Archive::CAR::CID v0.0.1 {
-    use Archive::CAR::Utils;
+class Archive::CAR::CID v0.0.2 {
+    use Archive::CAR::Utils qw[systell];
     field $version : param : reader;
     field $codec   : param : reader;
     field $hash    : param : reader;
@@ -38,13 +38,23 @@ class Archive::CAR::CID v0.0.1 {
     }
 
     sub decode ( $class, $fh ) {
-        my $pos_before = tell($fh);
-        read( $fh, my $first_byte, 1 ) or return undef;
+        my $pos_before = systell($fh);
+        my $first_byte;
+        my $fb_res = read( $fh, $first_byte, 1 );
+        return undef unless defined $fb_res && $fb_res == 1;
         my $fb = ord($first_byte);
+        if ( $fb == 0x00 ) {    # Optional leading zero
+            $pos_before = systell($fh);
+            $fb_res     = read( $fh, $first_byte, 1 );
+            return undef unless defined $fb_res && $fb_res == 1;
+            $fb = ord($first_byte);
+        }
         if ( $fb == 0x12 ) {    # Likely CIDv0 in binary form
-            read( $fh, my $second_byte, 1 );
+            my $second_byte;
+            read( $fh, $second_byte, 1 );
             if ( defined $second_byte && ord($second_byte) == 0x20 ) {
-                read( $fh, my $digest, 32 );
+                my $digest;
+                read( $fh, $digest, 32 );
                 my $raw = chr(0x12) . chr(0x20) . $digest;
                 return $class->new( version => 0, codec => 0x70, hash => 0x12, digest => $digest, raw => $raw );
             }
@@ -59,11 +69,20 @@ class Archive::CAR::CID v0.0.1 {
         return undef unless defined $mh_type;
         my ($mh_len) = Archive::CAR::Utils::decode_varint($fh);
         return undef unless defined $mh_len;
-        read( $fh, my $digest, $mh_len );
-        my $pos_after = tell($fh);
+        my $digest;
+        read( $fh, $digest, $mh_len );
+        my $pos_after = systell($fh);
         seek( $fh, $pos_before, 0 );
-        read( $fh, my $raw, $pos_after - $pos_before );
+        my $raw;
+        read( $fh, $raw, $pos_after - $pos_before );
         seek( $fh, $pos_after, 0 );
         return $class->new( version => $version, codec => $codec, hash => $mh_type, digest => $digest, raw => $raw );
     }
-} 1;
+
+    sub from_raw ( $class, $raw ) {
+        open my $fh, '<:raw', \$raw;
+        return $class->decode($fh);
+    }
+};
+#
+1;

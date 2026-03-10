@@ -2,8 +2,9 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 use Archive::CAR::Base;
-class Archive::CAR::v1 v0.0.1 : isa(Archive::CAR::Base) {
-    use Archive::CAR::Utils;
+#
+class Archive::CAR::v1 v0.0.2 : isa(Archive::CAR::Base) {
+    use Archive::CAR::Utils qw[systell];
     use CBOR::Free;
     use CBOR::Free::Decoder;
     field $header : reader;
@@ -11,8 +12,8 @@ class Archive::CAR::v1 v0.0.1 : isa(Archive::CAR::Base) {
     field $blocks : reader;
     method version () {1}
 
-    method read ( $fh, $limit = undef ) {
-        my $data_start = tell($fh);
+    method read ( $fh, $limit //= undef ) {
+        my $data_start = systell($fh);
 
         # Header
         my ($header_len) = Archive::CAR::Utils::decode_varint($fh);
@@ -35,8 +36,8 @@ class Archive::CAR::v1 v0.0.1 : isa(Archive::CAR::Base) {
             $roots = \@roots_list;
         }
         my @blocks_list;
-        while ( ( !defined $limit || tell($fh) < $data_start + $limit ) && not eof($fh) ) {
-            my $record_start = tell($fh);
+        while ( !defined $limit || systell($fh) < $data_start + $limit ) {
+            my $record_start = systell($fh);
             my ( $block_len, $varint_len ) = Archive::CAR::Utils::decode_varint($fh);
             last unless defined $block_len;
             my $cid = Archive::CAR::Utils::decode_cid($fh);
@@ -56,7 +57,7 @@ class Archive::CAR::v1 v0.0.1 : isa(Archive::CAR::Base) {
                 data        => $data,
                 offset      => $record_start,
                 length      => $block_len + $varint_len,
-                blockOffset => tell($fh) - $data_len,
+                blockOffset => systell($fh) - $data_len,
                 blockLength => $data_len,
                 };
         }
@@ -71,17 +72,19 @@ class Archive::CAR::v1 v0.0.1 : isa(Archive::CAR::Base) {
         my @cbor_roots     = map { CBOR::Free::tag( 42, $_->raw ) } @$roots;
         my $header_data    = { version => 1, roots => \@cbor_roots, };
         my $header_encoded = CBOR::Free::encode($header_data);
-        print $fh Archive::CAR::Utils::encode_varint( length($header_encoded) );
-        print $fh $header_encoded;
+        print {$fh} Archive::CAR::Utils::encode_varint( length($header_encoded) );
+        print {$fh} $header_encoded;
 
         # Write Blocks
         for my $block (@$blocks) {
             my $cid_raw   = $block->{cid}->raw;
             my $data      = $block->{data};
             my $block_len = length($cid_raw) + length($data);
-            print $fh Archive::CAR::Utils::encode_varint($block_len);
-            print $fh $cid_raw;
-            print $fh $data;
+            print {$fh} Archive::CAR::Utils::encode_varint($block_len);
+            print {$fh} $cid_raw;
+            print {$fh} $data;
         }
     }
-} 1;
+};
+#
+1;

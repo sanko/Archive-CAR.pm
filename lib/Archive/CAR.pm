@@ -1,8 +1,8 @@
 use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
-
-package Archive::CAR v0.0.1 {
+#
+package Archive::CAR v0.0.2 {
     use Archive::CAR::Base;
     use Archive::CAR::v1;
     use Archive::CAR::v2;
@@ -10,8 +10,8 @@ package Archive::CAR v0.0.1 {
     sub from_file ( $class, $filename ) {
         open( my $fh, '<:raw', $filename ) or die "Can't open $filename: $!";
         my $first_bytes;
-        read $fh, $first_bytes, 11;
-        seek $fh, 0, 0;
+        read( $fh, $first_bytes, 11 );
+        seek( $fh, 0, 0 );
         return Archive::CAR::v2->new()->read($fh)
             if $first_bytes eq pack( 'H*', '0aa16776657273696f6e02' ) || $first_bytes eq pack( 'H*', '0aa26576657273696f6e02' );
         return Archive::CAR::v1->new()->read($fh);
@@ -23,5 +23,6 @@ package Archive::CAR v0.0.1 {
         $car_obj->write( $fh, $roots, $blocks );
         close($fh);
     }
-}
+};
+#
 1;

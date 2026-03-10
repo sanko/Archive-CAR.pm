@@ -26,11 +26,11 @@ Returns 2.
 
 =head2 C<read($fh)>
 
-Reads the CAR v2 header and the inner CAR v1 archive.
+Reads the CAR v2 header and the inner CAR v1 archive using standard buffered I/O.
 
 =head2 C<write($fh, $roots, $blocks)>
 
-Writes a CAR v2 archive with a generated index.
+Writes a CAR v2 archive with a generated index using standard buffered I/O.
 
 =head2 C<header()>
 

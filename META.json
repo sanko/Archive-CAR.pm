@@ -51,31 +51,31 @@
    "provides" : {
       "Archive::CAR" : {
          "file" : "lib/Archive/CAR.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::Base" : {
          "file" : "lib/Archive/CAR/Base.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::CID" : {
          "file" : "lib/Archive/CAR/CID.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::Indexer" : {
          "file" : "lib/Archive/CAR/Indexer.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::Utils" : {
          "file" : "lib/Archive/CAR/Utils.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::v1" : {
          "file" : "lib/Archive/CAR/v1.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Archive::CAR::v2" : {
          "file" : "lib/Archive/CAR/v2.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       }
    },
    "release_status" : "stable",
@@ -87,7 +87,7 @@
          "url" : "https://github.com/sanko/Archive-CAR"
       }
    },
-   "version" : "v0.0.1",
+   "version" : "v0.0.2",
    "x_ignore" : [
       ".tidyallrc",
       ".gitignore",

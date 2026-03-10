@@ -2,7 +2,9 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 use Archive::CAR::v1;
-class Archive::CAR::v2 v0.0.1 : isa(Archive::CAR::v1) {
+#
+class Archive::CAR::v2 v0.0.2 : isa(Archive::CAR::v1) {
+    use Archive::CAR::Utils qw[systell];
     method version () {2}
     field $v2_header : reader;
     field $index     : reader;
@@ -22,8 +24,10 @@ class Archive::CAR::v2 v0.0.1 : isa(Archive::CAR::v1) {
         # Read Index if exists
         if ( $index_offset > 0 ) {
             seek( $fh, $index_offset, 0 );
-            local $/ = undef;
-            $index = <$fh>;
+            $index = '';
+            while ( read( $fh, my $buf, 8192 ) ) {
+                $index .= $buf;
+            }
         }
 
         # Read CAR v1 data
@@ -36,31 +40,31 @@ class Archive::CAR::v2 v0.0.1 : isa(Archive::CAR::v1) {
 
         # Pragma
         my $pragma = pack( 'H*', '0aa16776657273696f6e02' );
-        print $fh $pragma;
+        print {$fh} $pragma;
 
         # Header Placeholder (40 bytes)
-        my $header_pos = tell($fh);
-        print $fh pack( 'a40', '' );
+        my $header_pos = systell($fh);
+        print {$fh} pack( 'a40', '' );
 
         # Write CAR v1 data
-        my $data_offset = tell($fh);
+        my $data_offset = systell($fh);
         $self->SUPER::write( $fh, $roots, $blocks );
-        my $data_size = tell($fh) - $data_offset;
+        my $data_size = systell($fh) - $data_offset;
 
         # Index
-        my $index_offset = tell($fh);
+        my $index_offset = systell($fh);
         require Archive::CAR::Indexer;
         my $indexer    = Archive::CAR::Indexer->new();
         my $index_data = $indexer->generate_index( $self->blocks );
-        print $fh $index_data;
+        print {$fh} $index_data;
 
         # Backfill Header
-        my $current_pos = tell($fh);
+        my $current_pos = systell($fh);
         seek( $fh, $header_pos, 0 );
 
         # characteristics (16 bytes), data_offset (8), data_size (8), index_offset (8)
         my $header_raw = pack( 'a16 Q< Q< Q<', "\0" x 16, $data_offset, $data_size, $index_offset );
-        print $fh $header_raw;
+        print {$fh} $header_raw;
         seek( $fh, $current_pos, 0 );
     }
 
@@ -69,4 +73,6 @@ class Archive::CAR::v2 v0.0.1 : isa(Archive::CAR::v1) {
         my $v1_header = $self->SUPER::header;
         return { %$v2_header, roots => $v1_header->{roots}, version => 2, };
     }
-} 1;
+};
+#
+1;

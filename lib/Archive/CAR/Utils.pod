@@ -31,6 +31,11 @@ Decodes an unsigned varint from a filehandle or scalar string.
 
 Wrapper around L<Archive::CAR::CID/decode>.
 
+=head2 C<systell($fh)>
+
+Returns the current byte position in the given filehandle using standard buffered C<tell()>. Despite the name, this no
+longer uses C<sysseek> for improved compatibility.
+
 =head1 SEE ALSO
 
 L<Archive::CAR>
