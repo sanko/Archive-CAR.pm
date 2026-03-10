@@ -2,21 +2,20 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Archive::CAR::CID v0.0.2 {
+class Archive::CAR::CID v0.0.3 {
     use Archive::CAR::Utils qw[systell];
+    #
     field $version : param : reader;
     field $codec   : param : reader;
     field $hash    : param : reader;
     field $digest  : param : reader;
     field $raw     : param : reader;
-
+    #
     method to_string() {
 
         # Minimal string conversion for debugging/display
         # In a real IPFS context, this uses Multibase (base32 or base58)
-        if ( $version == 1 ) {
-            return 'b' . $self->_encode_base32($raw);
-        }
+        return 'b' . $self->_encode_base32($raw) if $version == 1;
         return unpack( 'H*', $raw );
     }
 

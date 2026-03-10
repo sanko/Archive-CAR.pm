@@ -2,8 +2,7 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 #
-package Archive::CAR v0.0.2 {
-    use Archive::CAR::Base;
+package Archive::CAR v0.0.3 {
     use Archive::CAR::v1;
     use Archive::CAR::v2;
 

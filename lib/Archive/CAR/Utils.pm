@@ -1,7 +1,6 @@
 use v5.40;
 #
-package Archive::CAR::Utils v0.0.2 {
-    use Fcntl 'SEEK_CUR';
+package Archive::CAR::Utils v0.0.3 {
     use Exporter 'import';
     our @EXPORT_OK = qw[encode_varint decode_varint decode_cid systell];
     #

@@ -1,16 +1,18 @@
 use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
-use Archive::CAR::Base;
 #
-class Archive::CAR::v1 v0.0.2 : isa(Archive::CAR::Base) {
+class Archive::CAR::v1 v0.0.3 {
     use Archive::CAR::Utils qw[systell];
     use CBOR::Free;
     use CBOR::Free::Decoder;
+    #
     field $header : reader;
     field $roots  : reader;
     field $blocks : reader;
-    method version () {1}
+    #
+    method version ()          {1}
+    method to_file ($filename) { Archive::CAR->write( $filename, $self->roots, $self->blocks, 1 ) }
 
     method read ( $fh, $limit //= undef ) {
         my $data_start = systell($fh);

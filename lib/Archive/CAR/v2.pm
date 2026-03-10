@@ -3,11 +3,14 @@ use feature 'class';
 no warnings 'experimental::class';
 use Archive::CAR::v1;
 #
-class Archive::CAR::v2 v0.0.2 : isa(Archive::CAR::v1) {
+class Archive::CAR::v2 v0.0.3 : isa(Archive::CAR::v1) {
     use Archive::CAR::Utils qw[systell];
-    method version () {2}
+    #
     field $v2_header : reader;
     field $index     : reader;
+    #
+    method version ()          {2}
+    method to_file ($filename) { Archive::CAR->write( $filename, $self->roots, $self->blocks, 2 ) }
 
     method read ($fh) {
 
