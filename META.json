@@ -35,7 +35,7 @@
       },
       "runtime" : {
          "requires" : {
-            "CBOR::Free" : "0.32",
+            "Codec::CBOR" : "0",
             "Crypt::PRNG" : "0",
             "Digest::SHA" : "0",
             "JSON::PP" : "0",
@@ -52,7 +52,7 @@
    "provides" : {
       "Archive::CAR" : {
          "file" : "lib/Archive/CAR.pm",
-         "version" : "v0.0.3"
+         "version" : "v0.0.4"
       },
       "Archive::CAR::CID" : {
          "file" : "lib/Archive/CAR/CID.pm",
@@ -90,7 +90,7 @@
          "web" : "https://github.com/sanko/Archive-CAR.pm"
       }
    },
-   "version" : "v0.0.3",
+   "version" : "v0.0.4",
    "x_ignore" : [
       ".tidyallrc",
       ".gitignore",
