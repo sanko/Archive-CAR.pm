@@ -27,19 +27,19 @@ provides:
     version: v0.0.4
   Archive::CAR::CID:
     file: lib/Archive/CAR/CID.pm
-    version: v0.0.3
+    version: v0.0.4
   Archive::CAR::Indexer:
     file: lib/Archive/CAR/Indexer.pm
-    version: v0.0.3
+    version: v0.0.4
   Archive::CAR::Utils:
     file: lib/Archive/CAR/Utils.pm
-    version: v0.0.3
+    version: v0.0.4
   Archive::CAR::v1:
     file: lib/Archive/CAR/v1.pm
     version: v0.0.4
   Archive::CAR::v2:
     file: lib/Archive/CAR/v2.pm
-    version: v0.0.3
+    version: v0.0.4
 requires:
   Codec::CBOR: '0'
   Crypt::PRNG: '0'
