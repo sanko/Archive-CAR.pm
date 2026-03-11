@@ -2,7 +2,7 @@ use v5.40;
 use feature 'class';
 no warnings 'experimental::class';
 #
-class Archive::CAR::v1 v0.0.3 {
+class Archive::CAR::v1 v0.0.4 {
     use Archive::CAR::Utils qw[systell];
     use Codec::CBOR;
     use Archive::CAR::CID;
@@ -18,8 +18,8 @@ class Archive::CAR::v1 v0.0.3 {
             42 => sub ($data) {
 
                 # Codec::CBOR returns raw bytes for Major Type 2
-                return Archive::CAR::CID->from_raw( substr( $data, 1 ) ) if !ref $data && substr( $data, 0, 1 ) eq "\x00";
-                return $data;
+                return Archive::CAR::CID->from_raw( substr( $data, 1 ) ) if substr( $data, 0, 1 ) eq "\x00";
+                return Archive::CAR::CID->from_raw($data);
             }
         );
         $codec->add_class_handler(

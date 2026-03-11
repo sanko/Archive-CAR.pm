@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Use our own CBOR implementation
+- Use our own CBOR implementation (`Codec::CBOR`) which returns raw strings for byte strings for type 42 data so we can remove the scalar reference check and directly use the data to create Archive::CAR::CID objects directly
 
 ## [v0.0.3] - 2026-03-10
 

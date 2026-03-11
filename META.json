@@ -68,7 +68,7 @@
       },
       "Archive::CAR::v1" : {
          "file" : "lib/Archive/CAR/v1.pm",
-         "version" : "v0.0.3"
+         "version" : "v0.0.4"
       },
       "Archive::CAR::v2" : {
          "file" : "lib/Archive/CAR/v2.pm",
